@@ -5,4 +5,4 @@ from .forms import SigninForm
 def sign_in(request):
     form = SigninForm()
     context = {'form': form}
-    return render(request,'sign-in.html')
+    return render(request,'sign-in.html', context)
