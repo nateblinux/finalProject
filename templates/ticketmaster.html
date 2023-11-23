@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Master of Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id='search-bar' class="container-fluid text-center text-light p-5 pb-3">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-1">Ticket Master</h1>
+            <h4 class="display-5 fw-bold">Quickly find tickets around you</h4>
+            <div class="col-lg-8 mx-auto pt-5">
+                <form>
+                    <div class="input-group mb-0">
+
+                        <input type="text" class="form-control" name="genre"
+                               placeholder="Search by genre, artist, or event" id="genre-input"
+                               aria-label="genre-input" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" id="city-input"
+                               placeholder="Enter a city e.g., Hartford"
+                               aria-label="city-input" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary btn-danger text-light" type="submit"
+                                id="button-addon2">
+                            SEARCH
+                        </button>
+                    </div>
+                </form>
+                <div id='warning' class="alert alert-danger text-start m-3" role="alert">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div id="hiding-container" class="container rounded-2 shadow-lg mx-auto mt-5 p-3">
+    <h3 id='num-of-events' class="text-start text-secondary">
+    </h3>
+    <div class="row align-items-start">
+        <div class="col">
+            <div id="results">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
+"></script>
+<script src="js/ticketmaster.js"></script>
+</body>
+</html>
