@@ -1,3 +1,5 @@
 .idea
 .env
 manage.py
+db.sqlite3
+venv
