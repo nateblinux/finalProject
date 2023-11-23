@@ -17,6 +17,7 @@ def login_view(request):
         form = AuthenticationForm()
 
     return render(request, 'accounts/login.html', {'form': form})
+
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -25,7 +26,9 @@ def register_view(request):
             return redirect('login')
     else:
         form = UserCreationForm()
-    return render(request, 'accounts/register.html')
+    return render(request, 'accounts/register.html', {'form': form})
+
+# We won't be needing these definitions below
 def sign_in(request):
     form = SigninForm()
     context = {'form': form}
@@ -37,6 +40,6 @@ def sign_up(request):
     context = {'form': form}
     return render(request, 'sign-up.html', context)
 
-
+# Except this one
 def ticket_master(request):
     return render(request, 'ticketmaster.html')
