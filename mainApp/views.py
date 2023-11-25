@@ -5,13 +5,18 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
 import requests
+from .models import *
 
 
 def api_request(genre_input, city_input):
     url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i&sort=date,asc"
     parameters = {
-        "keyword": "genre_input",
-        "city" : "city_input",
+        "keyword": genre_input,
+        "city" : city_input,
+    }
+    context = {
+        'genre': genre_input,
+        "city": city_input,
     }
     response = requests.get(url, params=parameters)
     print(response.json())
@@ -21,7 +26,12 @@ def api_request(genre_input, city_input):
     num_of_reults = data['page'] ['totalelements']
     print(num_of_reults)
 
-
+# Except this one
+def ticket_master(request):
+    if request.method == 'POST':
+        #toDo = request.POST['task']
+        redirect('ticketmaster-results')
+    return render(request, 'ticketmaster.html')
 
 
 
@@ -108,6 +118,4 @@ def sign_up(request):
     return render(request, 'sign-up.html', context)
 
 
-# Except this one
-def ticket_master(request):
-    return render(request, 'ticketmaster.html')
+

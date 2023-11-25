@@ -9,3 +9,4 @@ class Signup(models.Model):
     firstName = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
+

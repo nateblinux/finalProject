@@ -17,6 +17,7 @@
             <h4 class="display-5 fw-bold">Quickly find tickets around you</h4>
             <div class="col-lg-8 mx-auto pt-5">
                 <form>
+                    {% csrf_token %}
                     <div class="input-group mb-0">
 
                         <input type="text" class="form-control" name="genre"
@@ -31,6 +32,7 @@
                         </button>
                     </div>
                 </form>
+{#                <h1>{{ genre }}</h1>#}
                 <div id='warning' class="alert alert-danger text-start m-3" role="alert">
 
                 </div>
