@@ -8,36 +8,35 @@ import requests
 from .models import *
 
 
-def api_request(genre_input, city_input):
+def ticketmaster_results(request): #APIrequest works just trying to figure out taking variables from the post request
     url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i&sort=date,asc"
-    parameters = {
-        "keyword": genre_input,
-        "city" : city_input,
-    }
+    # parameters = {
+    #     "keyword": genre_input,
+    #     "city": city_input,
+    # }
     context = {
-        'genre': genre_input,
-        "city": city_input,
+        'genre': 'wow',
+        "city": 'wow',
     }
-    response = requests.get(url, params=parameters)
-    print(response.json())
-    data = response.json()
+    # response = requests.get(url, params=parameters)
+    # print(response.json())
+    # data = response.json()
 
-    data = data['_embedded']
-    num_of_reults = data['page'] ['totalelements']
-    print(num_of_reults)
+    # data = data['_embedded']
+    # numbof_results = data['page']['totalelements']
+    # print(numbof_results)
+    return render(request, 'ticketmaster_results.html', context)
+
 
 # Except this one
 def ticket_master(request):
     if request.method == 'POST':
-        #toDo = request.POST['task']
+        # genre = request.POST.get('genre')   can be used for later to store things to the data base
+        # city = request.POST.get('city')
+        # Ticket.objects.create(genre=genre, city=city)
+
         redirect('ticketmaster-results')
     return render(request, 'ticketmaster.html')
-
-
-
-
-
-
 
 
 # use this in case you want to have custom fields in User Registration Form
@@ -116,6 +115,3 @@ def sign_up(request):
     form = SignupForm()
     context = {'form': form}
     return render(request, 'sign-up.html', context)
-
-
-

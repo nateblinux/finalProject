@@ -16,7 +16,7 @@
             <h1 class="display-1">Ticket Master</h1>
             <h4 class="display-5 fw-bold">Quickly find tickets around you</h4>
             <div class="col-lg-8 mx-auto pt-5">
-                <form action="http://127.0.0.1:8000/ticketmaster-results" method="post">  {# can't figure out url dynamic not hard coded #}
+                <form>
                     {% csrf_token %}
                     <div class="input-group mb-0">
 
@@ -32,6 +32,7 @@
                         </button>
                     </div>
                 </form>
+              <h1>{{ genre }}</h1>
                 <div id='warning' class="alert alert-danger text-start m-3" role="alert">
 
                 </div>
@@ -62,6 +63,6 @@
 <script src="
 https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
 "></script>
-
+<script src="js/ticketmaster.js"></script>
 </body>
 </html>
