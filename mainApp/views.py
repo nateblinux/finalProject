@@ -4,6 +4,32 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
+import requests
+
+
+def api_request(genre_input, city_input):
+    url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i&sort=date,asc"
+    parameters = {
+        "keyword": "genre_input",
+        "city" : "city_input",
+    }
+    response = requests.get(url, params=parameters)
+    print(response.json())
+    data = response.json()
+
+    data = data['_embedded']
+    num_of_reults = data['page'] ['totalelements']
+    print(num_of_reults)
+
+
+
+
+
+
+
+
+
+
 # use this in case you want to have custom fields in User Registration Form
 # from django.contrib import messages
 
@@ -68,6 +94,7 @@ def logout_view(request):
     # redirect the user to index page after logout
     return redirect('index')
 
+
 # We won't be needing these definitions below
 def sign_in(request):
     form = SigninForm()
@@ -79,6 +106,7 @@ def sign_up(request):
     form = SignupForm()
     context = {'form': form}
     return render(request, 'sign-up.html', context)
+
 
 # Except this one
 def ticket_master(request):
