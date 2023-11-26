@@ -8,23 +8,23 @@ import requests
 from .models import *
 
 
-def ticketmaster_results(request): #APIrequest works just trying to figure out taking variables from the post request
+def ticketmaster_results(request): #APIrequest
     url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i&sort=date,asc"
-    # parameters = {
-    #     "keyword": genre_input,
-    #     "city": city_input,
-    # }
-    context = {
-        'genre': 'wow',
-        "city": 'wow',
+    parameters = {
+        "keyword": request.POST.get('genre'),
+        "city": request.POST.get('city'),
     }
-    # response = requests.get(url, params=parameters)
-    # print(response.json())
-    # data = response.json()
+    context = {
+        'genre': request.POST.get('genre'),
+        "city": request.POST.get('city'),
+    }
+    response = requests.get(url, params=parameters)
+    print(response.json())
+    data = response.json()
 
-    # data = data['_embedded']
-    # numbof_results = data['page']['totalelements']
-    # print(numbof_results)
+    data = data['_embedded']
+
+    print(data)
     return render(request, 'ticketmaster_results.html', context)
 
 
