@@ -62,12 +62,16 @@ def ticketmaster_results(request):  # APIrequest
                 embedded = event['_embedded']
                 if embedded['attractions']:
                     attractions = embedded['attractions']
-                    print(embedded['attractions'])
-                    if attractions[0]['externalLinks']:
-                        external_links = embedded['attractions'][0]['externalLinks']
-                        if external_links['spotify']:
-                            spotify_link = external_links['spotify'][0]['url']
-                            print(spotify_link)
+                    try:
+                        if attractions[0]['externalLinks'] in attractions:
+                            external_links = embedded['attractions'][0]['externalLinks'] #problem around here getting spotify URL
+                            if external_links['spotify']:
+                                spotify_link = external_links['spotify'][0]['url']
+                                print(spotify_link)
+
+
+                    except:
+                        print('not there')
 
 
 
