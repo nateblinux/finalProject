@@ -61,9 +61,9 @@ def ticketmaster_results(request):  # APIrequest
             if event['_embedded']:
                 embedded = event['_embedded']
                 if embedded['attractions']:
-
+                    attractions = embedded['attractions']
                     print(embedded['attractions'])
-                    if embedded['attractions'][0]['externalLinks']:
+                    if attractions[0]['externalLinks']:
                         external_links = embedded['attractions'][0]['externalLinks']
                         if external_links['spotify']:
                             spotify_link = external_links['spotify'][0]['url']
