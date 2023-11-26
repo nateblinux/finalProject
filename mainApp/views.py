@@ -1,3 +1,4 @@
+from encodings import undefined
 from django.shortcuts import render, redirect
 from .forms import SigninForm, SignupForm
 from django.contrib.auth import logout, login
@@ -5,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
 import requests
+import datetime
 from .models import *
 
 
@@ -19,7 +21,6 @@ def ticketmaster_results(request):  # APIrequest
         "city": request.POST.get('city'),
     }
     response = requests.get(url, params=parameters)
-    print(response.json())
     data = response.json()
     events_list = []
     num_of_results = data['page']['totalElements']
@@ -47,11 +48,23 @@ def ticketmaster_results(request):  # APIrequest
                         highest_res = image_res
                 x += 1
 
-            print(highest_res_index)
             images = event['images'][highest_res_index]
-            print(images)
             image_url = images['url']
-            print(image_url)
+            start_date = event['dates']['start']['dateTime']
+            date_time = datetime.datetime.fromisoformat(start_date)
+            formatted_date = date_time.strftime("%a %b %d %Y")
+            formatted_time = date_time.strftime("%I:%M %p")
+            spotify_link = ''
+            facebook_link = ''
+            twitter_link = ''
+            if event['_embedded'] != undefined:
+                embedded = event['_embedded']
+                if embedded['attractions'] != 'undefined':
+                    print(embedded['attractions'])
+                    external_links = embedded['attractions'][0]['externalLinks']
+                    if external_links != undefined and external_links['spotify'] != undefined:
+                        spotify_link = external_links['spotify'][0]['url']
+                        print(spotify_link)
 
 
 
