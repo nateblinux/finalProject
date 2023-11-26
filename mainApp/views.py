@@ -8,7 +8,7 @@ import requests
 from .models import *
 
 
-def ticketmaster_results(request): #APIrequest
+def ticketmaster_results(request):  # APIrequest
     url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i&sort=date,asc"
     parameters = {
         "keyword": request.POST.get('genre'),
@@ -21,17 +21,47 @@ def ticketmaster_results(request): #APIrequest
     response = requests.get(url, params=parameters)
     print(response.json())
     data = response.json()
+    events_list = []
+    num_of_results = data['page']['totalElements']
+    if num_of_results > 20:
+        num_of_results = 20
 
-    data = data['_embedded']
+    if num_of_results == 0:
+        print('No events found')
+    else:
+        data = data['_embedded']
+        events = data['events']
+        for event in events:
+            name = event['name']
+            x = 0
+            highest_res_index = 0
+            image_res = 0
+            highest_res = 0
 
-    print(data)
+            while x < len(event['images']):
+                images = event['images'][x]
+                if images['ratio'] == '16_9':
+                    image_res = images['width']
+                    if image_res > highest_res:
+                        highest_res_index = x
+                        highest_res = image_res
+                x += 1
+
+            print(highest_res_index)
+            images = event['images'][highest_res_index]
+            print(images)
+            image_url = images['url']
+            print(image_url)
+
+
+
     return render(request, 'ticketmaster_results.html', context)
 
 
 # Except this one
 def ticket_master(request):
     if request.method == 'POST':
-        # genre = request.POST.get('genre')   can be used for later to store things to the data base
+        # genre = request.POST.get('genre')   can be used for later to store things to the database
         # city = request.POST.get('city')
         # Ticket.objects.create(genre=genre, city=city)
 
