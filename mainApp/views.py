@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
 import requests
 import datetime
+import json
 from .models import *
 
 
@@ -57,14 +58,16 @@ def ticketmaster_results(request):  # APIrequest
             spotify_link = ''
             facebook_link = ''
             twitter_link = ''
-            if event['_embedded'] != undefined:
+            if event['_embedded']:
                 embedded = event['_embedded']
-                if embedded['attractions'] != 'undefined':
+                if embedded['attractions']:
+
                     print(embedded['attractions'])
-                    external_links = embedded['attractions'][0]['externalLinks']
-                    if external_links != undefined and external_links['spotify'] != undefined:
-                        spotify_link = external_links['spotify'][0]['url']
-                        print(spotify_link)
+                    if embedded['attractions'][0]['externalLinks']:
+                        external_links = embedded['attractions'][0]['externalLinks']
+                        if external_links['spotify']:
+                            spotify_link = external_links['spotify'][0]['url']
+                            print(spotify_link)
 
 
 
