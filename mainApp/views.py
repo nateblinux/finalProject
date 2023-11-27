@@ -1,3 +1,4 @@
+import traceback
 from encodings import undefined
 from django.shortcuts import render, redirect
 from .forms import SigninForm, SignupForm
@@ -12,67 +13,68 @@ from .models import *
 
 
 def ticketmaster_results(request):  # APIrequest
-    url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i&sort=date,asc"
+    print(request.POST)
+    url = "https://app.ticketmaster.com/discovery/v2/events.json"
     parameters = {
-        "keyword": request.POST.get('genre'),
+        "size": "20",
+        "apikey": "W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i",
+        "sort": "date,asc",
+        "classificationName": request.POST.get('genre'),
         "city": request.POST.get('city'),
     }
 
+    events_list = []
     response = requests.get(url, params=parameters)
     data = response.json()
-    events_list = []
-    num_of_results = data['page']['totalElements']
+    num_of_results = data["page"]["totalElements"]
     if num_of_results > 20:
         num_of_results = 20
 
-    if num_of_results == 0:
-        print('No events found')
-    else:
+    data = data['_embedded']
+    events = data['events']
 
-        data = data['_embedded']
-        events = data['events']
-        for event in events:
+    for event in events:
+        try:
             name = event['name']
-            x = 0
-            highest_res_index = 0
-            image_res = 0
-            highest_res = 0
+            images = event['images']
+            image_url = images[0]['url']
+            highest_res = images[0]['width']
+            lowest_res = images[0]['width']
+            low_res_img = ""
 
-            while x < len(event['images']):
-                name = event['name']
-                images = event['images'][x]
-                if images['ratio'] == '16_9':
-                    image_res = images['width']
-                    if image_res > highest_res:
-                        highest_res_index = x
-                        highest_res = image_res
-                x += 1
+            # get highest size here
+            for image in images:
+                if image['ratio'] == "16_9" and image['width'] > highest_res:
+                    image_url = image['url']
+                    highest_res = image['width']
 
-            images = event['images'][highest_res_index]
-            image_url = images['url']
-            start_date = event['dates']['start']['dateTime']
-            date_time = datetime.datetime.fromisoformat(start_date)
-            formatted_date = date_time.strftime("%a %b %d %Y")
-            formatted_time = date_time.strftime("%I:%M %p")
+            try:
+                start_date = event['dates']['start']['dateTime']
+                date_time = datetime.datetime.fromisoformat(start_date)
+                formatted_date = date_time.strftime("%a %b %d %Y")
+                formatted_time = date_time.strftime("%I:%M %p")
+            except:
+                formatted_time = ""
+                formatted_date = "N/A"
+
             spotify_link = ''
             facebook_link = ''
             twitter_link = ''
 
             embedded = event['_embedded']
-            if embedded['attractions']:
+            try:
                 attractions = embedded['attractions']
-                try:
-                    if attractions[0]['externalLinks']:
-                        external_links = embedded['attractions'][0][
-                            'externalLinks']  # problem around here getting spotify URL
-                        if external_links['spotify']:
-                            spotify_link = external_links['spotify'][0]['url']
-                        if external_links['facebook']:
-                            facebook_link = external_links['facebook'][0]['url']
-                        if external_links['twitter']:
-                            twitter_link = external_links['twitter'][0]['url']
-                except:
-                    print('not there')
+                if attractions[0]['externalLinks']:
+                    external_links = embedded['attractions'][0][
+                        'externalLinks']  # problem around here getting spotify URL
+                    if external_links['spotify']:
+                        spotify_link = external_links['spotify'][0]['url']
+                    if external_links['facebook']:
+                        facebook_link = external_links['facebook'][0]['url']
+                    if external_links['twitter']:
+                        twitter_link = external_links['twitter'][0]['url']
+            except:
+                print('not there')
 
             venue = embedded['venues'][0]
             venue_name = venue['name']
@@ -96,13 +98,16 @@ def ticketmaster_results(request):  # APIrequest
                 'name': name,
             }
             events_list.append(event_details)
+        except Exception as e:
+            print(event)
+            print(traceback.format_exc())
 
     context = {
         'events': events_list,
         'num_of_results': num_of_results
     }
 
-    return render(request, 'ticketmaster_results.html', context)
+    return render(request, 'ticketmaster_results.html', context=context)
 
 
 # Except this one
