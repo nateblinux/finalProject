@@ -17,10 +17,7 @@ def ticketmaster_results(request):  # APIrequest
         "keyword": request.POST.get('genre'),
         "city": request.POST.get('city'),
     }
-    context = {
-        'genre': request.POST.get('genre'),
-        "city": request.POST.get('city'),
-    }
+
     response = requests.get(url, params=parameters)
     data = response.json()
     events_list = []
@@ -41,6 +38,7 @@ def ticketmaster_results(request):  # APIrequest
             highest_res = 0
 
             while x < len(event['images']):
+                name = event['name']
                 images = event['images'][x]
                 if images['ratio'] == '16_9':
                     image_res = images['width']
@@ -82,7 +80,26 @@ def ticketmaster_results(request):  # APIrequest
             venue_address = venue['address']['line1']
             ticket_link = event['url']
             print(ticket_link)
+            event_details = {
+                'venue_name': venue_name,
+                'venue_city': venue_city,
+                'venue_state': venue_state,
+                'venue_address': venue_address,
+                'ticket_link': ticket_link,
+                'twitter_link': twitter_link,
+                'facebook_link': facebook_link,
+                'spotify_link': spotify_link,
+                'formatted_time': formatted_time,
+                'formatted_date': formatted_date,
+                'image_url': image_url,
+                'name': name,
+            }
+            events_list.append(event_details)
 
+    context = {
+        'events': events_list,
+        'num_of_results': num_of_results
+    }
 
     return render(request, 'ticketmaster_results.html', context)
 

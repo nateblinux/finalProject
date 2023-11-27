@@ -32,7 +32,6 @@
                         </button>
                     </div>
                 </form>
-              <h1>{{ genre }}</h1>
                 <div id='warning' class="alert alert-danger text-start m-3" role="alert">
 
                 </div>
@@ -51,6 +50,53 @@
     <div class="row align-items-start">
         <div class="col">
             <div id="results">
+                <div class="card mb-3 bg-white shadow-lg">\n' +
+                    <div class="row g-0">\n' +
+                        <div class="col-md-4 align-self-center text-md-start text-center">\n' +
+                            <img src="${imageURL}" class="img-fluid w-100 rounded-start" alt="...">\n // back tick
+                            notation `` allows you to insert variables
+                        </div>
+                        \n' +
+                        <div class="col-md-8">\n' +
+                            <div class="card-body">\n' +
+                                <div class="row justify-content-between">\n' +
+                                    <div class="col-6">\n' +
+                                        <h5 class="card-title ">${name}</h5>\n
+                                        <h5 class="card-title text-secondary">${venue}</h5>\n
+                                    </div>
+                                    \n' +
+                                    <div class="col-6 text-end">\n' +
+                                        <h5 class="card-title text-success">${dateFormatted}</h5>\n
+                                        <p class="text-success">${timeFormatted}</p>\n
+                                    </div>
+                                    \n' +
+                                </div>
+                                \n' +
+                                <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <p class="card-text text-secondary">${address} <br> ${city}, ${state}</p>\n
+                                        '\n' +
+                                    </div>
+                                    <div class="col-6 text-end ">
+                                        <a href="${spotifyLink}" class="logo-${i}  "> <i class="bi bi-spotify"></i></a>
+                                        <a href="${facebookLink}" class="facebook-logo-${i}"> <i
+                                                class="bi bi-facebook"></i></a>
+                                        <a href="${twitterLink}" class="twitter-logo-${i}"> <i
+                                                class="bi bi-twitter"></i></a>
+                                    </div>
+                                </div>
+                                <a href="${ticketLink}">\n
+                                    <button type="button" class="btn btn-primary mt-3">Find tickets</button>
+                                    \n' +
+                                </a>\n' +
+                            </div>
+                            \n' +
+                        </div>
+                        \n' +
+                    </div>
+                    \n' +
+                </div>
+                \n'
             </div>
         </div>
     </div>
