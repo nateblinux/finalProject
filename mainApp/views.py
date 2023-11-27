@@ -58,21 +58,30 @@ def ticketmaster_results(request):  # APIrequest
             spotify_link = ''
             facebook_link = ''
             twitter_link = ''
-            if event['_embedded']:
-                embedded = event['_embedded']
-                if embedded['attractions']:
-                    attractions = embedded['attractions']
-                    try:
-                        if attractions[0]['externalLinks'] in attractions:
-                            external_links = embedded['attractions'][0]['externalLinks'] #problem around here getting spotify URL
-                            if external_links['spotify']:
-                                spotify_link = external_links['spotify'][0]['url']
-                                print(spotify_link)
 
+            embedded = event['_embedded']
+            if embedded['attractions']:
+                attractions = embedded['attractions']
+                try:
+                    if attractions[0]['externalLinks']:
+                        external_links = embedded['attractions'][0][
+                            'externalLinks']  # problem around here getting spotify URL
+                        if external_links['spotify']:
+                            spotify_link = external_links['spotify'][0]['url']
+                        if external_links['facebook']:
+                            facebook_link = external_links['facebook'][0]['url']
+                        if external_links['twitter']:
+                            twitter_link = external_links['twitter'][0]['url']
+                except:
+                    print('not there')
 
-                    except:
-                        print('not there')
-
+            venue = embedded['venues'][0]
+            venue_name = venue['name']
+            venue_city = venue['city']['name']
+            venue_state = venue['state']['name']
+            venue_address = venue['address']['line1']
+            ticket_link = event['url']
+            print(ticket_link)
 
 
     return render(request, 'ticketmaster_results.html', context)
