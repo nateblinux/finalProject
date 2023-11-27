@@ -46,57 +46,55 @@
 
 <div id="hiding-container" class="container rounded-2 shadow-lg mx-auto mt-5 p-3">
     <h3 id='num-of-events' class="text-start text-secondary">
+        {{ num_of_results }}
     </h3>
     <div class="row align-items-start">
         <div class="col">
             <div id="results">
-                <div class="card mb-3 bg-white shadow-lg">\n' +
-                    <div class="row g-0">\n' +
-                        <div class="col-md-4 align-self-center text-md-start text-center">\n' +
-                            <img src="${imageURL}" class="img-fluid w-100 rounded-start" alt="...">\n // back tick
-                            notation `` allows you to insert variables
+
+                {% for event in events %}
+                
+                <div class="card mb-3 bg-white shadow-lg">  
+                    <div class="row g-0">  
+                        <div class="col-md-4 align-self-center text-md-start text-center">  
+                            <img src="{{event.image_url}}" class="img-fluid w-100 rounded-start" alt="...">
                         </div>
-                        \n' +
-                        <div class="col-md-8">\n' +
-                            <div class="card-body">\n' +
-                                <div class="row justify-content-between">\n' +
-                                    <div class="col-6">\n' +
-                                        <h5 class="card-title ">${name}</h5>\n
-                                        <h5 class="card-title text-secondary">${venue}</h5>\n
+                          
+                        <div class="col-md-8">  
+                            <div class="card-body">  
+                                <div class="row justify-content-between">  
+                                    <div class="col-6">  
+                                        <h5 class="card-title ">{{event.name}}</h5>  
+                                        <h5 class="card-title text-secondary">{{ event.venue_name }}</h5>  
                                     </div>
-                                    \n' +
-                                    <div class="col-6 text-end">\n' +
-                                        <h5 class="card-title text-success">${dateFormatted}</h5>\n
-                                        <p class="text-success">${timeFormatted}</p>\n
+                                      
+                                    <div class="col-6 text-end">  
+                                        <h5 class="card-title text-success">{{event.formatted_date}}</h5>  
+                                        <p class="text-success">{{event.formatted_time}}</p>  
                                     </div>
-                                    \n' +
+                                      
                                 </div>
-                                \n' +
+                                  
                                 <div class="row justify-content-between">
                                     <div class="col-6">
-                                        <p class="card-text text-secondary">${address} <br> ${city}, ${state}</p>\n
-                                        '\n' +
+                                        <p class="card-text text-secondary">{{ event.venue_address }} <br> {{ event.venue_city }}, {{ event.venue_state }}</p>
                                     </div>
                                     <div class="col-6 text-end ">
-                                        <a href="${spotifyLink}" class="logo-${i}  "> <i class="bi bi-spotify"></i></a>
-                                        <a href="${facebookLink}" class="facebook-logo-${i}"> <i
+                                        <a href="{{ event.spotify_link }}" class="logo-${i}  "> <i class="bi bi-spotify"></i></a>
+                                        <a href="{{ event.facebook_link }}" class="facebook-logo-${i}"> <i
                                                 class="bi bi-facebook"></i></a>
-                                        <a href="${twitterLink}" class="twitter-logo-${i}"> <i
+                                        <a href="{{ event.twitter_link }}" class="twitter-logo-${i}"> <i
                                                 class="bi bi-twitter"></i></a>
                                     </div>
                                 </div>
-                                <a href="${ticketLink}">\n
+                                <a href="{{ event.ticket_link }}">
                                     <button type="button" class="btn btn-primary mt-3">Find tickets</button>
-                                    \n' +
-                                </a>\n' +
+                                </a>  
                             </div>
-                            \n' +
                         </div>
-                        \n' +
                     </div>
-                    \n' +
                 </div>
-                \n'
+                {% endfor %}
             </div>
         </div>
     </div>
