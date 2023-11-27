@@ -28,6 +28,7 @@ def ticketmaster_results(request):  # APIrequest
     if num_of_results == 0:
         print('No events found')
     else:
+
         data = data['_embedded']
         events = data['events']
         for event in events:
