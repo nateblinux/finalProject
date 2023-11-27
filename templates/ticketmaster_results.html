@@ -1,5 +1,6 @@
-{% extends 'ticketmaster.html' %}
+{% extends 'ticketmaster_base.html' %}
 {% block events %}
+{% if not error %}
 <div id="hiding-container" class="container rounded-2 shadow-lg mx-auto mt-5 p-3">
     <h3 id='num-of-events' class="text-start text-secondary">
         Results: {{ num_of_results }}
@@ -61,4 +62,12 @@
         </div>
     </div>
 </div>
+{% endif %}
+{% if error == "no results found" %}
+    <div id="hiding-container" class="container rounded-2 shadow-lg mx-auto mt-5 p-3">
+        <h3 id='num-of-events' class="text-start text-secondary">
+            No Results Found
+        </h3>
+    </div>
+{% endif%}
 {% endblock %}

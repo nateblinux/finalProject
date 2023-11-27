@@ -17,7 +17,7 @@
             <h1 class="display-1">Ticket Master</h1>
             <h4 class="display-5 fw-bold">Quickly find tickets around you</h4>
             <div class="col-lg-8 mx-auto pt-5">
-                <form action="http://127.0.0.1:8000/ticketmaster-results" method="post">  {# can't figure out url dynamic not hard coded #}
+                <form action="http://127.0.0.1:8000/ticketmaster/" method="post">  {# can't figure out url dynamic not hard coded #}
                     {% csrf_token %}
                     <div class="input-group mb-0">
 
@@ -33,9 +33,11 @@
                         </button>
                     </div>
                 </form>
-                <div id='warning' class="alert alert-danger text-start m-3" role="alert">
-
-                </div>
+                {% if error == "input" %}
+                    <div id='warning' class="alert alert-danger text-start m-3" role="alert">
+                        {{ message }}
+                     </div>
+                {% endif %}
 
             </div>
 

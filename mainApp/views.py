@@ -12,8 +12,23 @@ import json
 from .models import *
 
 
-def ticketmaster_results(request):  # APIrequest
-    print(request.POST)
+def ticket_master(request):  # APIrequest
+    if not request.POST:
+        return render(request, 'ticketmaster_base.html')
+
+    if not request.POST.get('genre'):
+        context = {
+            'error': "input",
+            'message': "please enter an event type"
+        }
+
+    if not request.POST.get('city'):
+        context = {
+            'error': "input",
+            'message':"please enter a city"
+        }
+        return render(request, 'ticketmaster_results.html', context=context)
+
     url = "https://app.ticketmaster.com/discovery/v2/events.json"
     parameters = {
         "size": "20",
@@ -27,6 +42,15 @@ def ticketmaster_results(request):  # APIrequest
     response = requests.get(url, params=parameters)
     data = response.json()
     num_of_results = data["page"]["totalElements"]
+
+    if data["page"]["totalElements"] == 0:
+        context = {
+            'events': events_list,
+            'num_of_results': data["page"]["totalElements"],
+            'error': "no results found"
+        }
+        return render(request, 'ticketmaster_results.html', context=context)
+
     if num_of_results > 20:
         num_of_results = 20
 
@@ -104,21 +128,10 @@ def ticketmaster_results(request):  # APIrequest
 
     context = {
         'events': events_list,
-        'num_of_results': num_of_results
+        'num_of_results': num_of_results,
     }
 
     return render(request, 'ticketmaster_results.html', context=context)
-
-
-# Except this one
-def ticket_master(request):
-    if request.method == 'POST':
-        # genre = request.POST.get('genre')   can be used for later to store things to the database
-        # city = request.POST.get('city')
-        # Ticket.objects.create(genre=genre, city=city)
-
-        redirect('ticketmaster-results')
-    return render(request, 'ticketmaster.html')
 
 
 # use this in case you want to have custom fields in User Registration Form
