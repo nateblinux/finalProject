@@ -163,7 +163,6 @@ def signin(request):
         else:
             messages.error(request, "Invalid Credentials")
             return redirect('home')
-        return redirect('signin')
     return render(request, 'authentication/sign-in.html')
 
 
