@@ -10,11 +10,24 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    <strong>Message:</strong> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
 <h3>Welcome to Ticketmaster</h3>
 
-<a href="/signup" class="btn btn-primary" role="button">Sign Up</a>
-<a href="/signin" class="btn btn-primary" role="button">Sign In</a>
-<a href="/signout" class="btn btn-primary" role="button">Sign Out</a>
+{% if user.is_authenticated %}
+<h3>Hello {{ fname }}</h3>
+<h4>You're successfully logged in.</h4>
+<a href="{% url 'signout' %}" class="btn btn-primary" role="button">Sign Out</a>
+{% else %}
+<a href="{% url 'signup' %}" class="btn btn-primary" role="button">Sign Up</a>
+<a href="{% url 'signin' %}" class="btn btn-primary" role="button">Sign In</a>
+{% endif %}
 
 </body>
 </html>
