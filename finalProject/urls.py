@@ -25,4 +25,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('signout/', views.signout, name='signout'),
     path('ticketmaster/', views.ticket_master, name='ticketmaster'),
+    path('favorite/', views.favorite, name='favorite'),
+    path('favorites/', views.favorites, name='favorites'),
 ]

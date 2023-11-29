@@ -1,37 +1,33 @@
-{% extends 'ticketmaster_base.html' %}
-{% block events %}
-{% if not error %}
+{% extends 'base.html' %}
+{% block content %}
 <div id="hiding-container" class="container rounded-2 shadow-lg mx-auto mt-5 p-3">
-    <h3 id='num-of-events' class="text-start text-secondary">
-        Results: {{ num_of_results }}
-    </h3>
     <div class="row align-items-start">
         <div class="col">
             <div id="results">
 
                 {% for event in events %}
-                
-                <div class="card mb-3 bg-white shadow-lg">  
-                    <div class="row g-0">  
+
+                <div class="card mb-3 bg-white shadow-lg">
+                    <div class="row g-0">
                         <div class="col-md-4 align-self-center text-md-start text-center">
                             <img src="{{event.image_url}}" class="img-fluid w-100 rounded-start highest" alt="...">
                         </div>
-                          
-                        <div class="col-md-8">  
-                            <div class="card-body">  
-                                <div class="row justify-content-between">  
-                                    <div class="col-6">  
-                                        <h5 class="card-title ">{{event.name}}</h5>  
+
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <h5 class="card-title ">{{event.name}}</h5>
                                         <h5 class="card-title text-secondary">{{ event.venue_name }}</h5>
                                     </div>
-                                      
-                                    <div class="col-6 text-end">  
-                                        <h5 class="card-title text-success">{{event.formatted_date}}</h5>  
-                                        <p class="text-success">{{event.formatted_time}}</p>  
+
+                                    <div class="col-6 text-end">
+                                        <h5 class="card-title text-success">{{event.formatted_date}}</h5>
+                                        <p class="text-success">{{event.formatted_time}}</p>
                                     </div>
-                                      
+
                                 </div>
-                                  
+
                                 <div class="row justify-content-between">
                                     <div class="col-6">
                                         <p class="card-text text-secondary">{{ event.venue_address }} <br> {{ event.venue_city }}, {{ event.venue_state }}</p>
@@ -58,11 +54,7 @@
                                     </div>
                                     <div class="col text-end mt-4 mx-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-star" id = "{{ event.id }}" viewBox="0 0 16 16" onclick="favoriteClick('{{ event.id }}')">
-                                            {% if event.favorite == "True" %}
-                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                            {% else %}
-                                            	<path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
-                                            {% endif %}
+                                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                                         </svg>
                                     </div>
                                 </div>
@@ -75,12 +67,4 @@
         </div>
     </div>
 </div>
-{% endif %}
-{% if error == "no results found" %}
-    <div id="hiding-container" class="container rounded-2 shadow-lg mx-auto mt-5 p-3">
-        <h3 id='num-of-events' class="text-start text-secondary">
-            No Results Found
-        </h3>
-    </div>
-{% endif%}
 {% endblock %}
