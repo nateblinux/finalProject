@@ -10,7 +10,6 @@ class Signup(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
 
-
 class Ticket(models.Model):
     genre = models.CharField(max_length=200)
     city = models.CharField(max_length=200)

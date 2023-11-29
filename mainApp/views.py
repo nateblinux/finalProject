@@ -138,10 +138,6 @@ def ticket_master(request):  # APIrequest
 # use this in case you want to have custom fields in User Registration Form
 # from django.contrib import messages
 
-
-# # @login_required decorator allows to limit access to the index page and check whether the user is authenticated
-# # if so, index page is rendered. If not, the user is redirected to the login page via login_url
-# @login_required(login_url='login')
 def home(request):
     # Render the index page
     return render(request, 'authentication/index.html')
@@ -177,15 +173,18 @@ def signup(request):
         pass1 = request.POST.get('pass1')
         pass2 = request.POST.get('pass2')
 
-        myuser = User.objects.create_user(username, email, pass1)
-        myuser.first_name = fname
-        myuser.last_name = lname
+        if pass1 == pass2:
+            myuser = User.objects.create_user(username, email, pass1)
+            myuser.first_name = fname
+            myuser.last_name = lname
 
-        myuser.save()
+            myuser.save()
 
-        messages.success(request, "Your Account has been successfully created.")
+            messages.success(request, "Your Account has been successfully created.")
 
-        return redirect('signin')
+            return redirect('signin')
+        else:
+            messages.error(request, "Passwords Must Match")
 
     return render(request, 'authentication/sign-up.html')
 
