@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Signin(models.Model):
@@ -13,3 +14,9 @@ class Signup(models.Model):
 class Ticket(models.Model):
     genre = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    eventId = models.CharField(max_length=15)
+
