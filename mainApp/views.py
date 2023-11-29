@@ -14,9 +14,13 @@ from .models import *
 
 
 def ticket_master(request):  # APIrequest
+    if not request.user.is_anonymous:
+        user_name = request.user.first_name
+    else:
+        user_name = "Guest"
     if not request.POST:
         context = {
-            'fname': request.user.first_name
+            'fname': user_name
         }
         return render(request, 'ticketmaster_base.html', context=context)
 
@@ -24,7 +28,7 @@ def ticket_master(request):  # APIrequest
         context = {
             'error': "input",
             'message': "please enter an event type",
-            'fname': request.user.first_name
+            'fname': user_name,
         }
         return render(request, 'ticketmaster_results.html', context=context)
 
@@ -32,7 +36,7 @@ def ticket_master(request):  # APIrequest
         context = {
             'error': "input",
             'message': "please enter a city",
-            'fname': request.user.first_name
+            'fname': user_name
         }
         return render(request, 'ticketmaster_results.html', context=context)
 
@@ -55,7 +59,7 @@ def ticket_master(request):  # APIrequest
             'events': events_list,
             'num_of_results': data["page"]["totalElements"],
             'error': "no results found",
-            'fname': request.user.first_name
+            'fname': user_name
         }
         return render(request, 'ticketmaster_results.html', context=context)
 
@@ -116,7 +120,7 @@ def ticket_master(request):  # APIrequest
             ticket_link = event['url']
             id = event['id']
             is_favorite = "False"
-            if Favorite.objects.filter(user=request.user, eventId=id):
+            if not request.user.is_anonymous and Favorite.objects.filter(user=request.user, eventId=id):
                 is_favorite = "True"
             print(ticket_link)
             event_details = {
@@ -143,7 +147,7 @@ def ticket_master(request):  # APIrequest
     context = {
         'events': events_list,
         'num_of_results': num_of_results,
-        'fname': request.user.first_name
+        'fname': user_name
     }
 
     return render(request, 'ticketmaster_results.html', context=context)
