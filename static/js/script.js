@@ -40,18 +40,20 @@ let hiddenValue = $('#hidden-value').text();
 console.log(hiddenValue);
 if (hiddenValue === 'music') {
     $('#navbar-icon').append('<i class=" icons fa-solid fa-headphones pe-3"></i>');
+    $('body').css('background-image', 'linear-gradient(#6A5259, #D5BB9A)')
 } else if (hiddenValue === 'dance') {
     $('#navbar-icon').append('<i class="icons fa-solid fa-person-falling pe-3"></i>');
+    $('body').css('background-image', 'linear-gradient(#2B7591, #FEF9DD)')
+
 } else {
     $('#navbar-icon').append('<i class="icons fa-solid fa-icons fa-xl pe-3"></i>');
 }
 
 $(window).scroll(function () {
-     $('.icons').addClass('fa-bounce');
-        setTimeout(function (){
-                      $('.icons').removeClass('fa-bounce');
-
-        },2000);
+    $('.icons').addClass('fa-bounce');
+    setTimeout(function () {
+        $('.icons').removeClass('fa-bounce');
+    }, 2000);
 
 })
 
