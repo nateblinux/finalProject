@@ -46,7 +46,7 @@ if (hiddenValue === 'music') {
     $('body').css('background-image', 'linear-gradient(#6A5259, #D5BB9A)')
 
 } else if (hiddenValue === 'dance') {
-    $('#navbar-icon').append('<i class="icons fa-solid fa-person-falling pe-3"></i>');
+    $('#navbar-icon').append('<i class="icons fa-solid fa-rotate-60 fa-person-falling pe-3"></i>');
     $('body').css('background-image', 'linear-gradient(#2B7591, #FEF9DD)')
 
 } else {

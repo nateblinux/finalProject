@@ -177,7 +177,7 @@ def signin(request):
             return render(request, "ticketmaster_base.html", {'fname': fname})
         else:
             messages.error(request, "Invalid Credentials")
-            return redirect('home')
+            return redirect('signin')
     return render(request, 'authentication/sign-in.html')
 
 
