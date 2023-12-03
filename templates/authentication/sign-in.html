@@ -46,15 +46,15 @@
         <label for="signupButton" class="form-label">Don't have an account?</label>
         <a href="{% url 'signup' %}" class="btn btn-primary" role="button">Sign Up</a>
     </div>
-
+<div class="m-auto">
     {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <div class="alert alert-{{ message.tags }} alert-dismissible ps-0 fade show" role="alert">
             <strong>Message:</strong>
             <span class="lead"> {{ message }} </span>
             <span><i class="fa-solid fa-triangle-exclamation fa-shake fa-lg"></i></span>
             </div>
     {% endfor %}
-
+</div>
 </div>
 
 <script src="https://kit.fontawesome.com/dd042f02e4.js" crossorigin="anonymous"></script>
