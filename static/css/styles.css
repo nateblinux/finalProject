@@ -18,10 +18,18 @@ body {
 
 }
 
+#title {
+    margin-left: -100%;
 
+}
+
+.card:hover {
+    transition: transform 0.3s ease-in-out;
+    transform: scale(1.1);
+}
 
 #hidden-value {
-visibility: hidden;
+    visibility: hidden;
 
 }
 

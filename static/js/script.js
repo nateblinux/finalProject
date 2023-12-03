@@ -1,4 +1,7 @@
 const cardContainer = $('#results').val();
+jQuery.easing.def = 'easeIn';
+
+$('#title').animate({"margin-left": '0'}, 'slow');
 
 function favoriteClick(id) {
     console.log(id);
@@ -41,6 +44,7 @@ console.log(hiddenValue);
 if (hiddenValue === 'music') {
     $('#navbar-icon').append('<i class=" icons fa-solid fa-headphones pe-3"></i>');
     $('body').css('background-image', 'linear-gradient(#6A5259, #D5BB9A)')
+
 } else if (hiddenValue === 'dance') {
     $('#navbar-icon').append('<i class="icons fa-solid fa-person-falling pe-3"></i>');
     $('body').css('background-image', 'linear-gradient(#2B7591, #FEF9DD)')
@@ -51,6 +55,7 @@ if (hiddenValue === 'music') {
 
 $(window).scroll(function () {
     $('.icons').addClass('fa-bounce');
+
     setTimeout(function () {
         $('.icons').removeClass('fa-bounce');
     }, 2000);
@@ -58,16 +63,3 @@ $(window).scroll(function () {
 })
 
 
-//
-//     function(event) {
-//   const scrollTop = $(window).scrollTop();
-//   const previousScrollTop = $(this).data('previousScrollTop');
-//
-//   if (scrollTop < previousScrollTop) {
-//     console.log('Scrolling up');
-//   } else if (scrollTop > previousScrollTop) {
-//     console.log('Scrolling down');
-//   }
-//
-//   $(this).data('previousScrollTop', scrollTop);
-// });
