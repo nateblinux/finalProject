@@ -209,7 +209,7 @@ def signup(request):
 def signout(request):
     logout(request)
     messages.success(request, "Successfully Logged Out")
-    return redirect('home')
+    return redirect('signin')
 
 
 @login_required(login_url='/signin/')
