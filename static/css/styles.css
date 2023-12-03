@@ -15,4 +15,12 @@
 body {
     background-image: linear-gradient(#142A2E, #FEF9DD);
     margin-bottom: 100%;
+
+}
+
+#icon-background {
+  background-image: url('icon.png');
+  background-repeat: repeat;
+  background-position: center;
+  background-size: cover;
 }
