@@ -18,9 +18,9 @@ body {
 
 }
 
-#icon-background {
-  background-image: url('icon.png');
-  background-repeat: repeat;
-  background-position: center;
-  background-size: cover;
+
+#hidden-value {
+visibility: hidden;
+
 }
+

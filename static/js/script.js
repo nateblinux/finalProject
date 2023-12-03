@@ -34,10 +34,38 @@ if (cardContainer === '') {
 } else {
     $('body').css('margin-bottom', '40%');
 }
-console.log($('body').width());
-console.log($('body').height());
-let keepGoing = true
-let body = $('body');
-let bodyHeight = body.height();
-let bodyWidth = body.width();
-let count = 0;
+
+
+let hiddenValue = $('#hidden-value').text();
+console.log(hiddenValue);
+if (hiddenValue === 'music') {
+    $('#navbar-icon').append('<i class=" icons fa-solid fa-headphones pe-3"></i>');
+} else if (hiddenValue === 'dance') {
+    $('#navbar-icon').append('<i class="icons fa-solid fa-person-falling pe-3"></i>');
+} else {
+    $('#navbar-icon').append('<i class="icons fa-solid fa-icons fa-xl pe-3"></i>');
+}
+
+$(window).scroll(function () {
+     $('.icons').addClass('fa-bounce');
+        setTimeout(function (){
+                      $('.icons').removeClass('fa-bounce');
+
+        },2000);
+
+})
+
+
+//
+//     function(event) {
+//   const scrollTop = $(window).scrollTop();
+//   const previousScrollTop = $(this).data('previousScrollTop');
+//
+//   if (scrollTop < previousScrollTop) {
+//     console.log('Scrolling up');
+//   } else if (scrollTop > previousScrollTop) {
+//     console.log('Scrolling down');
+//   }
+//
+//   $(this).data('previousScrollTop', scrollTop);
+// });

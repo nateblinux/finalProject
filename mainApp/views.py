@@ -40,6 +40,7 @@ def ticket_master(request):  # APIrequest
         }
         return render(request, 'ticketmaster_results.html', context=context)
 
+    genre_value = request.POST.get('genre');
     url = "https://app.ticketmaster.com/discovery/v2/events.json"
     parameters = {
         "size": "20",
@@ -147,7 +148,8 @@ def ticket_master(request):  # APIrequest
     context = {
         'events': events_list,
         'num_of_results': num_of_results,
-        'fname': user_name
+        'fname': user_name,
+        'genre_value': genre_value
     }
 
     return render(request, 'ticketmaster_results.html', context=context)
