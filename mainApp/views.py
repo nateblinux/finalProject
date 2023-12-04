@@ -1,3 +1,4 @@
+import os
 import traceback
 from encodings import undefined
 
@@ -11,9 +12,13 @@ import requests
 import datetime
 import json
 from .models import *
+from dotenv import load_dotenv
+import google.generativeai as palm
+
 
 
 def ticket_master(request):  # APIrequest
+    prompt_str = ""
     if not request.user.is_anonymous:
         user_name = request.user.first_name
     else:
@@ -51,6 +56,8 @@ def ticket_master(request):  # APIrequest
     }
 
     events_list = []
+    favorite = {}
+    suggestion = ""
     response = requests.get(url, params=parameters)
     data = response.json()
     num_of_results = data["page"]["totalElements"]
@@ -70,82 +77,44 @@ def ticket_master(request):  # APIrequest
     data = data['_embedded']
     events = data['events']
 
+    if not request.user.is_anonymous:
+        favorites = Favorite.objects.filter(user=request.user)
+        palm_string = "The user enjoys the following events: "
+        for favorite in favorites:
+            parameters = {
+                "apikey": "W8KLJ3KiVgrPoXNNAbenReqGAuhGnZ1i",
+                "id": favorite.eventId,
+            }
+
+            response = requests.get(url, params=parameters)
+            data = response.json()
+
+            data = data['_embedded']
+            event = data['events'][0]
+
+            palm_string = palm_string + " " + event['name'] + ","
+
+        palm_string = palm_string + " recommend one event from the following json list of events and return the result as simply an event name: "
+        for event in events:
+            palm_string = palm_string + " " + event['name'] + ","
+
+        print(palm_string)
+        suggestion = get_palm(palm_string)
+
     for event in events:
         try:
-            name = event['name']
-            images = event['images']
-            image_url = images[0]['url']
-            highest_res = images[0]['width']
-            lowest_res = images[0]['width']
-            low_res_img = ""
-
-            # get highest size here
-            for image in images:
-                if image['ratio'] == "16_9" and image['width'] > highest_res:
-                    image_url = image['url']
-                    highest_res = image['width']
-
-            try:
-                start_date = event['dates']['start']['dateTime']
-                date_time = datetime.datetime.fromisoformat(start_date)
-                formatted_date = date_time.strftime("%a %b %d %Y")
-                formatted_time = date_time.strftime("%I:%M %p")
-            except:
-                formatted_time = ""
-                formatted_date = "N/A"
-
-            spotify_link = ''
-            facebook_link = ''
-            twitter_link = ''
-
-            embedded = event['_embedded']
-            try:
-                attractions = embedded['attractions']
-                if attractions[0]['externalLinks']:
-                    external_links = embedded['attractions'][0][
-                        'externalLinks']  # problem around here getting spotify URL
-                    if external_links['spotify']:
-                        spotify_link = external_links['spotify'][0]['url']
-                    if external_links['facebook']:
-                        facebook_link = external_links['facebook'][0]['url']
-                    if external_links['twitter']:
-                        twitter_link = external_links['twitter'][0]['url']
-            except:
-                print('not there')
-
-            venue = embedded['venues'][0]
-            venue_name = venue['name']
-            venue_city = venue['city']['name']
-            venue_state = venue['state']['name']
-            venue_address = venue['address']['line1']
-            ticket_link = event['url']
-            id = event['id']
-            is_favorite = "False"
-            if not request.user.is_anonymous and Favorite.objects.filter(user=request.user, eventId=id):
-                is_favorite = "True"
-            print(ticket_link)
-            event_details = {
-                'venue_name': venue_name,
-                'venue_city': venue_city,
-                'venue_state': venue_state,
-                'venue_address': venue_address,
-                'ticket_link': ticket_link,
-                'twitter_link': twitter_link,
-                'facebook_link': facebook_link,
-                'spotify_link': spotify_link,
-                'formatted_time': formatted_time,
-                'formatted_date': formatted_date,
-                'image_url': image_url,
-                'name': name,
-                'id': id,
-                'favorite': is_favorite
-            }
+            if event['name'] == suggestion:
+                favorite = parse_data(event)
+                event_details = favorite
+            else:
+                event_details = parse_data(event)
             events_list.append(event_details)
         except Exception as e:
             print(event)
             print(traceback.format_exc())
 
     context = {
+        'favorite': favorite,
         'events': events_list,
         'num_of_results': num_of_results,
         'fname': user_name,
@@ -273,70 +242,7 @@ def favorites(request):
             data = data['_embedded']
             event = data['events'][0]
 
-            name = event['name']
-            images = event['images']
-            image_url = images[0]['url']
-            highest_res = images[0]['width']
-            lowest_res = images[0]['width']
-            low_res_img = ""
-
-            # get highest size here
-            for image in images:
-                if image['ratio'] == "16_9" and image['width'] > highest_res:
-                    image_url = image['url']
-                    highest_res = image['width']
-
-            try:
-                start_date = event['dates']['start']['dateTime']
-                date_time = datetime.datetime.fromisoformat(start_date)
-                formatted_date = date_time.strftime("%a %b %d %Y")
-                formatted_time = date_time.strftime("%I:%M %p")
-            except:
-                formatted_time = ""
-                formatted_date = "N/A"
-
-            spotify_link = ''
-            facebook_link = ''
-            twitter_link = ''
-
-            embedded = event['_embedded']
-            try:
-                attractions = embedded['attractions']
-                if attractions[0]['externalLinks']:
-                    external_links = embedded['attractions'][0][
-                        'externalLinks']  # problem around here getting spotify URL
-                    if external_links['spotify']:
-                        spotify_link = external_links['spotify'][0]['url']
-                    if external_links['facebook']:
-                        facebook_link = external_links['facebook'][0]['url']
-                    if external_links['twitter']:
-                        twitter_link = external_links['twitter'][0]['url']
-            except:
-                print('not there')
-
-            venue = embedded['venues'][0]
-            venue_name = venue['name']
-            venue_city = venue['city']['name']
-            venue_state = venue['state']['name']
-            venue_address = venue['address']['line1']
-            ticket_link = event['url']
-            id = event['id']
-            print(ticket_link)
-            event_details = {
-                'venue_name': venue_name,
-                'venue_city': venue_city,
-                'venue_state': venue_state,
-                'venue_address': venue_address,
-                'ticket_link': ticket_link,
-                'twitter_link': twitter_link,
-                'facebook_link': facebook_link,
-                'spotify_link': spotify_link,
-                'formatted_time': formatted_time,
-                'formatted_date': formatted_date,
-                'image_url': image_url,
-                'name': name,
-                'id': id,
-            }
+            event_details = parse_data(event)
             events_list.append(event_details)
         except Exception as e:
             print(event)
@@ -348,3 +254,89 @@ def favorites(request):
     }
 
     return render(request, 'favorites.html', context)
+
+
+def parse_data(event):
+
+    name = event['name']
+    images = event['images']
+    image_url = images[0]['url']
+    highest_res = images[0]['width']
+    lowest_res = images[0]['width']
+    low_res_img = ""
+
+    # get highest size here
+    for image in images:
+        if image['ratio'] == "16_9" and image['width'] > highest_res:
+            image_url = image['url']
+            highest_res = image['width']
+
+    try:
+        start_date = event['dates']['start']['dateTime']
+        date_time = datetime.datetime.fromisoformat(start_date)
+        formatted_date = date_time.strftime("%a %b %d %Y")
+        formatted_time = date_time.strftime("%I:%M %p")
+    except:
+        formatted_time = ""
+        formatted_date = "N/A"
+
+    spotify_link = ''
+    facebook_link = ''
+    twitter_link = ''
+
+    embedded = event['_embedded']
+    try:
+        attractions = embedded['attractions']
+        if attractions[0]['externalLinks']:
+            external_links = embedded['attractions'][0][
+                'externalLinks']  # problem around here getting spotify URL
+            if external_links['spotify']:
+                spotify_link = external_links['spotify'][0]['url']
+            if external_links['facebook']:
+                facebook_link = external_links['facebook'][0]['url']
+            if external_links['twitter']:
+                twitter_link = external_links['twitter'][0]['url']
+    except:
+        print('not there')
+
+    venue = embedded['venues'][0]
+    venue_name = venue['name']
+    venue_city = venue['city']['name']
+    venue_state = venue['state']['name']
+    venue_address = venue['address']['line1']
+    ticket_link = event['url']
+    id = event['id']
+    print(ticket_link)
+    event_details = {
+        'venue_name': venue_name,
+        'venue_city': venue_city,
+        'venue_state': venue_state,
+        'venue_address': venue_address,
+        'ticket_link': ticket_link,
+        'twitter_link': twitter_link,
+        'facebook_link': facebook_link,
+        'spotify_link': spotify_link,
+        'formatted_time': formatted_time,
+        'formatted_date': formatted_date,
+        'image_url': image_url,
+        'name': name,
+        'id': id,
+    }
+
+    return event_details
+
+def get_palm(palm_string):
+    load_dotenv()
+    palm_key = os.getenv('GOOGLE_API_KEY')
+    palm.configure(api_key=palm_key)
+    try:
+        response = palm.generate_text(
+            model='models/text-bison-001',
+            prompt=palm_string,
+            temperature=0
+        )
+        print(f'recommend: {response.result}')
+        return response.result
+    except Exception as err:
+        print(err)
+        return err
