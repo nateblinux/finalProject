@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 import google.generativeai as palm
 
 
-
 def ticket_master(request):  # APIrequest
     prompt_str = ""
     if not request.user.is_anonymous:
@@ -88,11 +87,14 @@ def ticket_master(request):  # APIrequest
 
             response = requests.get(url, params=parameters)
             data = response.json()
+            try:
+                data = data['_embedded']
+                event = data['events'][0]
 
-            data = data['_embedded']
-            event = data['events'][0]
-
-            palm_string = palm_string + " " + event['name'] + ","
+                palm_string = palm_string + " " + event['name'] + ","
+            except Exception as e:
+                print(e)
+                continue
 
         palm_string = palm_string + " recommend one event from the following json list of events and return the result as simply an event name: "
         for event in events:
@@ -257,7 +259,6 @@ def favorites(request):
 
 
 def parse_data(event):
-
     name = event['name']
     images = event['images']
     image_url = images[0]['url']
@@ -324,6 +325,7 @@ def parse_data(event):
     }
 
     return event_details
+
 
 def get_palm(palm_string):
     load_dotenv()
