@@ -17,7 +17,7 @@ django-crispy-forms==2.1
 frozenlist==1.4.0
 google==3.0.0
 google-ai-generativelanguage==0.3.3
-google-api-core>2.15.0
+google-api-core<2.15.0
 google-api-python-client==2.109.0
 google-auth==2.25.0
 google-auth-httplib2==0.1.1
