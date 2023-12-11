@@ -9,7 +9,7 @@
         </div>
             <h4 class="display-5 fw-bold">Quickly find tickets around you</h4>
             <div class="col-lg-8 mx-auto pt-5">
-                <form action="http://127.0.0.1:8000/ticketmaster/" method="post">  {# can't figure out url dynamic not hard coded #}
+                <form action="{% url 'ticketmaster' %}" method="post">
                     {% csrf_token %}
                     <div class="input-group mb-0">
 
