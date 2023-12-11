@@ -105,11 +105,75 @@ def ticket_master(request):  # APIrequest
 
     for event in events:
         try:
-            if event['name'] == suggestion:
-                favorite = parse_data(event)
-                event_details = favorite
-            else:
-                event_details = parse_data(event)
+            name = event['name']
+            images = event['images']
+            image_url = images[0]['url']
+            highest_res = images[0]['width']
+
+            # get highest size here
+            for image in images:
+                if image['ratio'] == "16_9" and image['width'] > highest_res:
+                    image_url = image['url']
+                    highest_res = image['width']
+
+            try:
+                start_date = event['dates']['start']['dateTime']
+                date_time = datetime.datetime.fromisoformat(start_date)
+                formatted_date = date_time.strftime("%a %b %d %Y")
+                formatted_time = date_time.strftime("%I:%M %p")
+            except:
+                formatted_time = ""
+                formatted_date = "N/A"
+
+            spotify_link = ''
+            facebook_link = ''
+            twitter_link = ''
+
+            embedded = event['_embedded']
+            try:
+                attractions = embedded['attractions']
+                if attractions[0]['externalLinks']:
+                    external_links = embedded['attractions'][0][
+                        'externalLinks']  # problem around here getting spotify URL
+                    if external_links['spotify']:
+                        spotify_link = external_links['spotify'][0]['url']
+                    if external_links['facebook']:
+                        facebook_link = external_links['facebook'][0]['url']
+                    if external_links['twitter']:
+                        twitter_link = external_links['twitter'][0]['url']
+            except:
+                print('not there')
+
+            venue = embedded['venues'][0]
+            venue_name = venue['name']
+            venue_city = venue['city']['name']
+            venue_state = venue['state']['name']
+            venue_address = venue['address']['line1']
+            ticket_link = event['url']
+            id = event['id']
+            is_favorite = "False"
+            if not request.user.is_anonymous and Favorite.objects.filter(user=request.user, eventId=id):
+                is_favorite = "True"
+            print(ticket_link)
+            event_details = {
+                'venue_name': venue_name,
+                'venue_city': venue_city,
+                'venue_state': venue_state,
+                'venue_address': venue_address,
+                'ticket_link': ticket_link,
+                'twitter_link': twitter_link,
+                'facebook_link': facebook_link,
+                'spotify_link': spotify_link,
+                'formatted_time': formatted_time,
+                'formatted_date': formatted_date,
+                'image_url': image_url,
+                'name': name,
+                'id': id,
+                'favorite': is_favorite
+            }
+            if name == suggestion:
+                favorite = event_details
+
             events_list.append(event_details)
         except Exception as e:
             print(event)
